@@ -1,10 +1,14 @@
 package models
 
 import (
+	"errors"
 	"time"
+
+	"logAnalyzer/pkg"
 
 	"gorm.io/gorm"
 )
+
 
 type ErrorGroup struct {
 	ID        uint   `gorm:"primaryKey;autoIncrement"`
@@ -26,9 +30,18 @@ func (eg *ErrorGroup) CreateErrorG(lastSeen time.Time,key string) error {
 }
 
 func (eg *ErrorGroup) IncraeseCount() error {
-	eg.Count++
+	//get the latest records in 10 min on logs table
+	groupKey:=pkg.DecodeGroupKey(eg.GroupKey)
+	if groupKey ==nil{
+		return errors.New("Error While Decoding groupKey")
+	}
+	count,err:=GetLatestLogsCount(groupKey["service"],groupKey["level"])
+	if err !=nil{
+		return err
+	}
+	eg.Count=count
 	eg.LastSeen = time.Now()
-	_, err := gorm.G[ErrorGroup](db).Where("id=?", eg.ID).Updates(ctx, *eg)
+	_, err = gorm.G[ErrorGroup](db).Where("id=?", eg.ID).Updates(ctx, *eg)
 	return err
 }
 
@@ -43,6 +56,11 @@ func GetErrorGbyKey(groupKey string) (*ErrorGroup, error) {
 	}
 	eg := &egs[0]
 	return eg, nil
+}
+
+func (eg *ErrorGroup) SetSummary() error{
+		_, err := gorm.G[ErrorGroup](db).Where("id=?", eg.ID).Updates(ctx, *eg)
+	return err
 }
 
 // func (eg *ErrorGroup) GetErrorG() error {

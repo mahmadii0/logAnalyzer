@@ -9,5 +9,5 @@ import (
 func HealthRouter(r *gin.RouterGroup) {
 	handler := handlers.NewLogsHandler()
 
-	r.POST("", handler.GetLogs)
+	r.POST("", handler.PostLogs)
 }

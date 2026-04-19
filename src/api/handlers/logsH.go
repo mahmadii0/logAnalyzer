@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
-	"log"
+	"logAnalyzer/api/helper"
 	"logAnalyzer/models"
 	"logAnalyzer/services"
+	"net/http"
+	"github.com/gin-gonic/gin"
 )
 
 type LogsHandler struct {
@@ -14,11 +15,20 @@ func NewLogsHandler() *LogsHandler {
 	return &LogsHandler{}
 }
 
-func (h *LogsHandler) GetLogs(c *gin.Context) {
+func (h *LogsHandler) PostLogs(c *gin.Context) {
 	lg := models.Log{}
-	err := c.ShouldBindHeader(&lg)
+	err := c.ShouldBindJSON(&lg)
 	if err != nil {
-		log.Printf("Error binding header: %v", err)
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			helper.GenerateBaseRwithValidationError("Error binding header",
+			false,-1,err))
+		return
 	}
-	services.RegisterLog(&lg)
+	err=services.RegisterLog(&lg)
+	if err!=nil{
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			helper.GenerateBaseRwithValidationError("Error while registering log",
+			false,-1,err))
+		return
+	}
 }
