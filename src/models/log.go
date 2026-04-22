@@ -2,7 +2,7 @@ package models
 
 import (
 	"context"
-	database "logAnalyzer/data/db"
+	"logAnalyzer/data/db"
 	"time"
 
 	"gorm.io/gorm"
