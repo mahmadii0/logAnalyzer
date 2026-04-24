@@ -1,10 +1,12 @@
 package handlers
 
 import (
+	"log"
 	"logAnalyzer/api/helper"
 	"logAnalyzer/models"
 	"logAnalyzer/services"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +18,7 @@ func NewLogsHandler() *LogsHandler {
 }
 
 func (h *LogsHandler) PostLogs(c *gin.Context) {
+	log.Println("POST REQUEST RECEIVED")
 	lg := models.Log{}
 	err := c.ShouldBindJSON(&lg)
 	if err != nil {
@@ -30,5 +33,7 @@ func (h *LogsHandler) PostLogs(c *gin.Context) {
 			helper.GenerateBaseRwithValidationError("Error while registering log",
 			false,-1,err))
 		return
+	}else{
+		log.Println("Log Successfuly Registered")
 	}
 }

@@ -45,7 +45,7 @@ func RegisterLog(lg *models.Log) error {
 		ok=GetAleartStatus(-1, eg)
 	}
 	if ok{
-
+		
 	}
 	return nil
 }

@@ -48,8 +48,7 @@ func (eg *ErrorGroup) IncraeseCount() error {
 		return err
 	}
 	eg.Count = count
-	_, err = gorm.G[ErrorGroup](db).Where("id=?", eg.ID).
-		Updates(ctx, *eg)
+	eg.UpdateErrorG()
 	return err
 }
 

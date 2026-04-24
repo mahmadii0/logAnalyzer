@@ -18,7 +18,7 @@ func GetAleartStatus(limitNumber int, eg *models.ErrorGroup) bool{
 			}else{
 				err:=GetConfidence(eg)
 				if err != nil {
-					log.Printf("Error While Getting Summary")
+					log.Printf("Error While Getting Confidence")
 				}
 			}
 			eg.LastSeen = time.Now()
@@ -29,8 +29,9 @@ func GetAleartStatus(limitNumber int, eg *models.ErrorGroup) bool{
 		eg.UpdateErrorG()
 		return false
 	}
-	
-	eg.CalBaselineAVG()
+	if eg.Count == 1{
+		eg.CalBaselineAVG()
+	}
 	eg.LastSeen = time.Now()
 	eg.UpdateErrorG()
 	if eg.Count >= int(eg.BaselineAVG) {
@@ -43,7 +44,7 @@ func GetAleartStatus(limitNumber int, eg *models.ErrorGroup) bool{
 		}else{
 			err:=GetConfidence(eg)
 			if err != nil {
-				log.Printf("Error While Getting Summary")
+				log.Printf("Error While Getting Confidence")
 			}
 		}
 		return true

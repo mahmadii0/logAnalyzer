@@ -4,6 +4,7 @@ import (
 	"log"
 	"logAnalyzer/env"
 	"logAnalyzer/models"
+
 	_ "github.com/joho/godotenv/autoload"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -24,4 +25,5 @@ func CreateTables() {
 		log.Fatal(err)
 	}
 	db.AutoMigrate(models.Log{}, models.ErrorGroup{})
+	log.Println("[Database Connected Successfuly]")
 }

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"logAnalyzer/api/routers"
 	"logAnalyzer/api/validations"
 
@@ -21,6 +22,6 @@ func InitServer() {
 		logs := v1.Group("/logs")
 		routers.HealthRouter(logs)
 	}
-
+	log.Println("[Log Analyzer Started!]")
 	r.Run(":8000")
 }
