@@ -29,4 +29,3 @@ func GetValidationErrors(err error) *[]ValidationError {
 	return nil
 }
 
-//Messages left
